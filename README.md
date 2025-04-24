@@ -22,7 +22,13 @@ cargo install --path .
 ## Usage
 
 This will convert the Parquet file into a temporary JSONL file which can be edited with Vim.
-```bash
+```sh
 vim ./my.parquet
 ```
 Upon saving, the original parquet file will be updated with the changes made in Vim.
+
+Parquet files can also be created from scratch.
+```sh
+vim new.parquet
+```
+As long as the contents are valid JSONL, the new parquet file will be created upon saving.

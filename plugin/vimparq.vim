@@ -2,6 +2,7 @@
 augroup ParquetEdit
   autocmd!
   autocmd BufReadPost *.parquet call ParquetView(expand("%:p"))
+  autocmd BufNewFile *.parquet call ParquetCreate(expand("%:p"))
   autocmd BufWriteCmd *.vimparq.jsonl call ParquetSave(expand("%:p"))
 augroup END
 
@@ -9,6 +10,17 @@ function! ParquetView(filepath)
   let tmpfile = tempname() . ".vimparq.jsonl"
   let cmd = "vimparq view " . shellescape(a:filepath) . " > " . shellescape(tmpfile)
   call system(cmd)
+  silent! execute 'edit ' . tmpfile
+  setlocal filetype=json
+  setlocal nowrap
+  setlocal syntax=off
+  let b:parquet_original = a:filepath
+  let b:parquet_tmpfile = tmpfile
+endfunction
+
+function! ParquetCreate(filepath)
+  " Called when a new *.parquet file is opened
+  let tmpfile = tempname() . ".vimparq.jsonl"
   silent! execute 'edit ' . tmpfile
   setlocal filetype=json
   setlocal nowrap
